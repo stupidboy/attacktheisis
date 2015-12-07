@@ -1,6 +1,4 @@
-package cn.spreadtrum.com.attacktheisis;
-
-import android.graphics.Rect;
+package cn.spreadtrum.com.attacktheisis.obj;
 
 /**
  * Created by SPREADTRUM\joe.yu on 11/30/15.

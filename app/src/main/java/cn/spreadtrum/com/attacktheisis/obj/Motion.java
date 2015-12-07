@@ -1,12 +1,15 @@
-package cn.spreadtrum.com.attacktheisis;
+package cn.spreadtrum.com.attacktheisis.obj;
 
-import android.graphics.Point;
+import cn.spreadtrum.com.attacktheisis.obj.Coordinate;
 
 /**
  * Created by SPREADTRUM\joe.yu on 11/30/15.
  */
 public class Motion {
-    protected Coordinate  position;
+
+    public static final int MOTION_TYPE_NORMAL = 0;
+    public static final int MOTION_TYPE_ACC = 1;
+    protected Coordinate position;
     protected int motionType;
     protected int speed;
 

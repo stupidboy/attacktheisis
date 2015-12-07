@@ -1,6 +1,5 @@
-package cn.spreadtrum.com.attacktheisis;
+package cn.spreadtrum.com.attacktheisis.obj;
 
-import android.graphics.Point;
 import android.graphics.Rect;
 
 /**

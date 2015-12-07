@@ -1,4 +1,4 @@
-package cn.spreadtrum.com.attacktheisis;
+package cn.spreadtrum.com.attacktheisis.obj;
 
 /**
  * Created by SPREADTRUM\joe.yu on 11/30/15.
@@ -10,7 +10,7 @@ public class Jet extends BaseObj{
 
     private static final int GUN_SHOOT_SPEED = 5; //5 bullets per sec.
     private static final int GUN_BULLET_COUNTS = 1;
-    private static final int GUN_PAY_LOAD = -100; //means unlimit
+    private static final int GUN_PAY_LOAD = 100; // unlimit
 
     private Gun mGun;
     public Jet( Motion motion ,String name, int width, int height) {
@@ -19,6 +19,6 @@ public class Jet extends BaseObj{
     }
 
      void setWeapons() {
-         mGun = new Gun(this, GUN_SHOOT_SPEED, GUN_PAY_LOAD,GUN_BULLET_COUNTS);
+         mGun = new Gun(this, GUN_SHOOT_SPEED, GUN_PAY_LOAD,true);
      }
 }

@@ -7,5 +7,6 @@ public class ERROR {
 
     public static final int ERROR_OK = 0;
     public static final int ERROR_OUT_OF_BULLET = -1;
+    public static final int ERROR_BULLET_REFILLING = -2;
 
 }

@@ -29,6 +29,7 @@ public class Jet extends BaseObj {
         Log.e(Settings.TAG, "Jet creating..... " + motion);
         setWeapons();
         mView = BitmapFactory.decodeResource(context.getResources(),R.drawable.jet);
+        mAliance = Settings.ALIANCE_UN;
     }
 
     private float lastX;
@@ -76,5 +77,11 @@ public class Jet extends BaseObj {
         mGun.onDraw(canvas);
         super.onDraw(canvas);
 
+    }
+
+    @Override
+    protected void OnDestory() {
+        super.OnDestory();
+        getStage().gameOver();
     }
 }

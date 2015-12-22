@@ -14,7 +14,7 @@ public class Gun extends BaseWeapon {
     private static final int BULLET_AREA = 5;
     private static final int BULLET_WIDTH = 30;
     private static final int BULLET_HEIGHT = 30;
-    private static final int BULLET_DAMAGE = 50;
+    private static final int BULLET_DAMAGE = 100;
     private static final int BULLET_SPEED = 20;
 
     Motion mBulletMotion;
@@ -46,7 +46,7 @@ public class Gun extends BaseWeapon {
     @Override
     public void onDraw(Canvas can) {
         super.onDraw(can);
-        if(mAutoFire){
+        if(mAutoFire && !owner.motion.position.outOfScreen()){
             if(mShotUp)
             this.fire();
             else{

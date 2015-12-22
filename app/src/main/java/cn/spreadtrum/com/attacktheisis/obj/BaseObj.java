@@ -45,6 +45,7 @@ public class BaseObj {
     protected Bitmap mView;
     protected Rect mRect = new Rect();
     protected Stage mStage;
+    protected int mAliance = 0;
 
     public BaseObj(int health, int status, Motion motion, int armorType, String name, int width, int height, Context context, Stage stage) {
         this.health = health;
@@ -80,7 +81,7 @@ public class BaseObj {
         return mStage;
     }
     protected boolean isUnderAttack(Bullet bullet) {
-        if(bullet.weapon.owner == this){
+        if(bullet.weapon.owner == this || bullet.weapon.owner.mAliance == this.mAliance){
             return false;
         }
         int left = (int) (motion.position.getPosX() - width / 2);

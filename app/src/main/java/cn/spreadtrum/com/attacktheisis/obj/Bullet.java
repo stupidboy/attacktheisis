@@ -94,6 +94,7 @@ public class Bullet {
         for(BaseObj obj : objs){
             if(obj.isUnderAttack(this)){
                 hit(obj);
+                return;
             }
         }
     }

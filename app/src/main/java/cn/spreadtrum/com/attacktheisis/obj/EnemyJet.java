@@ -24,18 +24,20 @@ public class EnemyJet extends  BaseObj {
     private Gun mGun;
     private Jet mTarget;
     private int speedX = Settings.ENEMY_JET_SPEED;
+    private int speedY = Settings.ENEMY_JET_SPEED/2;
     public EnemyJet(Motion motion, String name, int width, int height,Context context,Jet target, Stage stage) {
         super(JET_HEALTH, STATUS_NORMAL, motion, JET_ARMOR_TYPE, name, width, height,context ,stage);
         mView = BitmapFactory.decodeResource(context.getResources(), R.drawable.enemy_jet);
         Log.e(Settings.TAG, "Enemy Jet creating..... " + motion);
         setWeapons();
-
+        mAliance = Settings.ALIANCE_IS;
         mTarget = target;
     }
 
     @Override
     protected void OnDestory() {
         super.OnDestory();
+        getStage().updateScore(Settings.ENEMY_JET_SCORE);
         reset();
 
     }
@@ -78,7 +80,13 @@ public class EnemyJet extends  BaseObj {
             if(motion.position.getPosX() >= mStage.getScreenWidth()){
                 speedX = -Settings.ENEMY_JET_SPEED;
             }
-            motion.setSpeed(speedX,0);
+            if(motion.position.getPosY() >= mStage.getmScreenHeight()/2){
+                speedY = -Settings.ENEMY_JET_SPEED/2;
+            }
+            if(motion.position.getPosY() < this.height+20){
+                speedY = Settings.ENEMY_JET_SPEED/2;
+            }
+            motion.setSpeed(speedX, speedY);
         }
         motion.update();
     }

@@ -19,7 +19,7 @@ public class Jet extends BaseObj {
     private static int JET_HEALTH = 100;
     private static int JET_ARMOR_TYPE = Armor.ARMOR_JET;
 
-    private static final int GUN_SHOOT_SPEED = 2; //5 bullets per sec.
+    private static final int GUN_SHOOT_SPEED = 20; //5 bullets per sec.
     private static final int GUN_PAY_LOAD = 100; // unlimit
 
     private Gun mGun;
@@ -37,7 +37,7 @@ public class Jet extends BaseObj {
         mView = null;
         Bitmap all =  BitmapFactory.decodeResource(mContext.getResources(),R.drawable.jet2);
         for (int i = 0; i < Settings.UN_JET_NORMAL_ANIM_COUNTS; i++){
-            mViews[i] = Bitmap.createBitmap(all, all.getWidth()/4,0,all.getWidth()/4, all.getHeight());
+            mViews[i] = Bitmap.createBitmap(all, i*all.getWidth()/4,0,all.getWidth()/4, all.getHeight());
         }
 
     }
@@ -79,6 +79,7 @@ public class Jet extends BaseObj {
 
     void setWeapons() {
         mGun = new Gun(this, GUN_SHOOT_SPEED, GUN_PAY_LOAD, true,true);
+        mGun.updateFireControl(5,3);
     }
 
     @Override

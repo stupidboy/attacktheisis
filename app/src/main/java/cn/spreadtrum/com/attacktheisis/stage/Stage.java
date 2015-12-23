@@ -166,7 +166,6 @@ public class Stage {
         }
     }
     public void onTouch(MotionEvent event){
-        Log.e(Settings.TAG,"Motion ---->"+event);
         synchronized (this) {
             switch (mGameStatus) {
                 case GAME_STATUS_INIT:

@@ -38,25 +38,36 @@ public class BaseWeapon {
         }
     }
 
-    public int fireTargetPosition(int x, int y) {
-        synchronized (mPayloadLock) {
-            if (payLoad <= 0) {
-                return ERROR.ERROR_OUT_OF_BULLET;
+    private Bullet getNextBullet(){
+        synchronized (mBullets) {
+            for (int i = 0; i < mBullets.length; i++) {
+                if (mBullets[i].mStatus == Bullet.STATUS_HIDDEN) {
+                    return mBullets[i];
+                }
             }
-            if (!unlimited) payLoad--;
-
-            Bullet bullet = mQueue.dequeue();
-            if(bullet != null) {
-                owner.getStage().playShot();
-                bullet.flyToTarget(new Coordinate(x, y));
-                return ERROR.ERROR_OK;
-            }else {
-                return ERROR.ERROR_BULLET_REFILLING;
-            }
+            return null;
         }
     }
+    public int fireTargetPosition(int x, int y) {
+
+            synchronized (mPayloadLock) {
+                if (payLoad <= 0) {
+                    return ERROR.ERROR_OUT_OF_BULLET;
+                }
+                if (!unlimited) payLoad--;
+
+                Bullet bullet =getNextBullet();
+                if (bullet != null) {
+                    owner.getStage().playShot();
+                    bullet.flyToTarget(new Coordinate(x, y));
+                    return ERROR.ERROR_OK;
+                } else {
+                    return ERROR.ERROR_BULLET_REFILLING;
+                }
+            }
+    }
     public void reFillBullet( Bullet bullet){
-        mQueue.enqueue(bullet);
+
     }
     public int fireTargetPosition(Coordinate co) {
         return fireTargetPosition(co.getPosX(), co.getPosY());

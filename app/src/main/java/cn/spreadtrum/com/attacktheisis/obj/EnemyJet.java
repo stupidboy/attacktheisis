@@ -19,7 +19,7 @@ public class EnemyJet extends  BaseObj {
     private static int JET_HEALTH = 100;
     private static int JET_ARMOR_TYPE = Armor.ARMOR_JET;
 
-    private static final int GUN_SHOOT_SPEED = 1; //5 bullets per sec.
+    private static final int GUN_SHOOT_SPEED = 3; //5 bullets per sec.
     private static final int GUN_PAY_LOAD = 100; // unlimit
 
     private Gun mGun;
@@ -58,6 +58,7 @@ public class EnemyJet extends  BaseObj {
 
     void setWeapons() {
         mGun = new Gun(this, GUN_SHOOT_SPEED, GUN_PAY_LOAD, true,true,false);
+        mGun.updateFireControl(5,3);
     }
 
     @Override

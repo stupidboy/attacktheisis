@@ -5,10 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import cn.spreadtrum.com.attacktheisis.R;
 import cn.spreadtrum.com.attacktheisis.obj.Motion;
+import cn.spreadtrum.com.attacktheisis.obj.Settings;
 
 /**
  * Created by SPREADTRUM\joe.yu on 12/23/15.
@@ -68,6 +70,7 @@ public class GameMenu {
         int right = (int) (startX + startWidth / 2);
         int bottom = (int) (startY + startHeight / 2);
         Rect rect = new Rect(left, top, right, bottom);
+        Log.e(Settings.TAG,"start Touched? ----->"+x+":"+y+" ---->target x = "+startX+" y = "+startY+" w = "+startWidth+" h = "+startHeight);
         return rect.contains(x, y);
     }
 

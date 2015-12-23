@@ -74,9 +74,9 @@ public class BaseObj {
         mDistoryAnim = new Bitmap[Settings.DESTORY_ANIM_COUNTS];
         for (int i = 0; i < Settings.DESTORY_ANIM_COUNTS; i++) {
             if (i < 4) {
-                mDistoryAnim[i] = Bitmap.createBitmap(all, i * Settings.DESTORY_ANIM_WIDTH, 0, Settings.DESTORY_ANIM_WIDTH, Settings.DESTORY_ANIM_HEIGHT);
+                mDistoryAnim[i] = Bitmap.createBitmap(all, i * all.getWidth()/4, 0, all.getWidth()/4, all.getHeight()/2);
             } else {
-                mDistoryAnim[i] = Bitmap.createBitmap(all, (i - 4) * Settings.DESTORY_ANIM_WIDTH, Settings.DESTORY_ANIM_HEIGHT, Settings.DESTORY_ANIM_WIDTH, Settings.DESTORY_ANIM_HEIGHT);
+                mDistoryAnim[i] = Bitmap.createBitmap(all, (i - 4) *  all.getWidth()/4, all.getHeight()/2,  all.getWidth()/4 ,all.getHeight()/2);
             }
 
         }
@@ -122,7 +122,7 @@ public class BaseObj {
         int right = (int) (motion.position.getPosX() + width / 2);
         int bottom = (int) (motion.position.getPosY() + height / 2);
         Rect rect = new Rect(left, top, right, bottom);
-        rect.inset(-bullet.trueAreaX, -bullet.trueAreaY);
+        //rect.inset(-bullet.attackArea, -bullet.attackArea);
         return rect.contains(bullet.motion.position.getPosX(), bullet.motion.position.getPosY());
     }
 

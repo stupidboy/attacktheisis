@@ -24,8 +24,9 @@ public class EnemyJet extends  BaseObj {
 
     private Gun mGun;
     private Jet mTarget;
-    private int speedX = Settings.ENEMY_JET_SPEED;
-    private int speedY = Settings.ENEMY_JET_SPEED/2;
+    private int speedX = 0;
+    private int speedY = 0;
+    private int speedRef = 0;
 
     public EnemyJet(Motion motion, String name, int width, int height,Context context,Jet target, Stage stage) {
         super(JET_HEALTH, STATUS_NORMAL, motion, JET_ARMOR_TYPE, name, width, height,context ,stage);
@@ -35,13 +36,15 @@ public class EnemyJet extends  BaseObj {
         mAliance = Settings.ALIANCE_IS;
         mTarget = target;
         initNormalAnim();
+        speedRef = (int)(getStage().getmScreenHeight()*0.01);
+        speedX = speedRef;
     }
     private void  initNormalAnim(){
         mViews = new  Bitmap[Settings.ENEMY_JET_NORMAL_ANIM_COUNTS];
         mView = null;
         Bitmap all =  BitmapFactory.decodeResource(mContext.getResources(),R.drawable.enemy2);
         for (int i = 0; i < Settings.ENEMY_JET_NORMAL_ANIM_COUNTS; i++){
-            mViews[i] = Bitmap.createBitmap(all, i*Settings.ENEMY_JET_NORMAL_ANIM_WIDTH,0,Settings.ENEMY_JET_NORMAL_ANIM_WIDTH, Settings.ENEMY_JET_NORMAL_ANIM_HEIGHT);
+            mViews[i] = Bitmap.createBitmap(all, i*all.getWidth()/4,0,all.getWidth()/4, all.getHeight());
         }
 
     }
@@ -85,19 +88,19 @@ public class EnemyJet extends  BaseObj {
     private void updateMotion(){
         //1. out of screen, get in the stage...
         if(motion.position.getPosY() <= this.height){
-            motion.setSpeed(0,Settings.ENEMY_JET_SPEED);
+            motion.setSpeed(0,speedRef);
         }else{
             if(motion.position.getPosX() < 0){
-                speedX = Settings.ENEMY_JET_SPEED;
+                speedX = speedRef;
             }
             if(motion.position.getPosX() >= mStage.getScreenWidth()){
-                speedX = -Settings.ENEMY_JET_SPEED;
+                speedX = -speedRef;
             }
             if(motion.position.getPosY() >= mStage.getmScreenHeight()/2){
-                speedY = -Settings.ENEMY_JET_SPEED/2;
+                speedY = -(int)(speedRef*0.5);
             }
             if(motion.position.getPosY() < this.height+20){
-                speedY = Settings.ENEMY_JET_SPEED/2;
+                speedY = (int)(speedRef*0.5);
             }
             motion.setSpeed(speedX, speedY);
         }

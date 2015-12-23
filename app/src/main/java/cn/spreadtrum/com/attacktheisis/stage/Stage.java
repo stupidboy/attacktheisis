@@ -100,7 +100,7 @@ public class Stage {
         Log.e(Settings.TAG, "addJet ---->co = "+coordinate);
         Motion motion = new Motion(Motion.MOTION_TYPE_NORMAL, coordinate,0);
         Log.e(Settings.TAG, "addJet 1---->" + motion + "screen :w " + mScreenWidth + "Screen h:" + mScreenHeight);
-        mJet = new Jet(motion,"JOE", Settings.JET_WIDTH,Settings.JET_HEIGHT,mContext,this);
+        mJet = new Jet(motion,"JOE", mScreenWidth/5,mScreenWidth/5,mContext,this);
         Log.e(Settings.TAG, "addJet ---->" + motion);
         synchronized (mObjs) {
             mObjs.add(mJet);
@@ -110,7 +110,7 @@ public class Stage {
         Coordinate coordinate = new Coordinate(mScreenWidth/2,mScreenHeight/4);
         Motion motion = new Motion(Motion.MOTION_TYPE_NORMAL, coordinate,0);
         Log.e(Settings.TAG, "addJet 1---->" + motion + "screen :w " + mScreenWidth + "Screen h:" + mScreenHeight);
-        EnemyJet jet = new EnemyJet(motion,"EMY-1", Settings.ENEMY_JET_WIDTH,Settings.ENEMY_JET_HEIGHT,mContext,mJet,this);
+        EnemyJet jet = new EnemyJet(motion,"EMY-1", mScreenWidth/5,mScreenWidth/5,mContext,mJet,this);
         jet.reset();
         Log.e(Settings.TAG, "addJet ---->" + motion);
         synchronized (mObjs) {
@@ -166,6 +166,7 @@ public class Stage {
         }
     }
     public void onTouch(MotionEvent event){
+        Log.e(Settings.TAG,"Motion ---->"+event);
         synchronized (this) {
             switch (mGameStatus) {
                 case GAME_STATUS_INIT:
@@ -207,7 +208,7 @@ public class Stage {
     }
     private void drawGameOver(Canvas canvas) {
         mPaint.setTextSize(70);
-        canvas.drawText("Score "+mScore,mScreenWidth/2-100, getmScreenHeight()/3,mPaint);
+        canvas.drawText("Score " + mScore, mScreenWidth / 2 - 100, getmScreenHeight() / 3, mPaint);
         mGameMenu.drawOnGameOver(canvas);
     }
 

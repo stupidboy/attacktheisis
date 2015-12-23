@@ -37,7 +37,7 @@ public class Jet extends BaseObj {
         mView = null;
         Bitmap all =  BitmapFactory.decodeResource(mContext.getResources(),R.drawable.jet2);
         for (int i = 0; i < Settings.UN_JET_NORMAL_ANIM_COUNTS; i++){
-            mViews[i] = Bitmap.createBitmap(all, i*Settings.UN_JET_NORMAL_ANIM_WIDTH,0,Settings.UN_JET_NORMAL_ANIM_WIDTH, Settings.UN_JET_NORMAL_ANIM_HEIGHT);
+            mViews[i] = Bitmap.createBitmap(all, all.getWidth()/4,0,all.getWidth()/4, all.getHeight());
         }
 
     }

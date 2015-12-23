@@ -11,7 +11,7 @@ import cn.spreadtrum.com.attacktheisis.R;
 public class Gun extends BaseWeapon {
 
 
-    private static final int BULLET_AREA = 2;
+    private static final int BULLET_AREA = -10;
     private static final int BULLET_WIDTH = 15;
     private static final int BULLET_HEIGHT = 30;
     private static final int BULLET_DAMAGE = 100;
@@ -36,7 +36,7 @@ public class Gun extends BaseWeapon {
 
     }
     private void initBullets() {
-        mBulletMotion = new Motion(Motion.MOTION_TYPE_NORMAL, this.owner.motion.position, BULLET_SPEED); //bullest use the owner's pos as default.
+        mBulletMotion = new Motion(Motion.MOTION_TYPE_NORMAL, this.owner.motion.position, owner.getStage().getmScreenHeight()/60); //bullest use the owner's pos as default.
         mBullets = new GunBullet[shootingSpeed];
         for (int i = 0; i < shootingSpeed; i++) {
             GunBullet bullet = new GunBullet(mBulletMotion);

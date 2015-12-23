@@ -25,13 +25,22 @@ public class Jet extends BaseObj {
     private Gun mGun;
 
     public Jet(Motion motion, String name, int width, int height,Context context ,Stage stage) {
-        super(JET_HEALTH, STATUS_NORMAL, motion, JET_ARMOR_TYPE, name, width, height,context, stage);
+        super(JET_HEALTH, STATUS_NORMAL, motion, JET_ARMOR_TYPE, name, width, height, context, stage);
         Log.e(Settings.TAG, "Jet creating..... " + motion);
         setWeapons();
-        mView = BitmapFactory.decodeResource(context.getResources(),R.drawable.jet);
+        //mView = BitmapFactory.decodeResource(context.getResources(),R.drawable.jet);
         mAliance = Settings.ALIANCE_UN;
+        initNormalAnim();
     }
+    private void  initNormalAnim(){
+        mViews = new  Bitmap[Settings.UN_JET_NORMAL_ANIM_COUNTS];
+        mView = null;
+        Bitmap all =  BitmapFactory.decodeResource(mContext.getResources(),R.drawable.jet2);
+        for (int i = 0; i < Settings.UN_JET_NORMAL_ANIM_COUNTS; i++){
+            mViews[i] = Bitmap.createBitmap(all, i*Settings.UN_JET_NORMAL_ANIM_WIDTH,0,Settings.UN_JET_NORMAL_ANIM_WIDTH, Settings.UN_JET_NORMAL_ANIM_HEIGHT);
+        }
 
+    }
     private float lastX;
     private float lastY;
     private boolean touching = false ;
@@ -78,7 +87,14 @@ public class Jet extends BaseObj {
         super.onDraw(canvas);
 
     }
-
+    @Override
+    protected void drawNormalAnim(Canvas canvas) {
+        //super.drawNormalAnim(canvas);
+        if (mNormalAnimCounts >= mViews.length) {
+            mNormalAnimCounts = 0;
+        }
+        drawBitmap(mViews[mNormalAnimCounts++], canvas);
+    }
     @Override
     protected void OnDestory() {
         super.OnDestory();

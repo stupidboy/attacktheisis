@@ -47,6 +47,7 @@ public class BaseWeapon {
 
             Bullet bullet = mQueue.dequeue();
             if(bullet != null) {
+                owner.getStage().playShot();
                 bullet.flyToTarget(new Coordinate(x, y));
                 return ERROR.ERROR_OK;
             }else {

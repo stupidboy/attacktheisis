@@ -11,8 +11,8 @@ import cn.spreadtrum.com.attacktheisis.R;
 public class Gun extends BaseWeapon {
 
 
-    private static final int BULLET_AREA = 5;
-    private static final int BULLET_WIDTH = 30;
+    private static final int BULLET_AREA = 2;
+    private static final int BULLET_WIDTH = 15;
     private static final int BULLET_HEIGHT = 30;
     private static final int BULLET_DAMAGE = 100;
     private static final int BULLET_SPEED = 20;
@@ -23,15 +23,17 @@ public class Gun extends BaseWeapon {
     public Gun(BaseObj owner, int shootingSpeed, int payLoad, boolean unlimited, boolean autoFire) {
         super(owner, shootingSpeed, payLoad, unlimited);
         mAutoFire = autoFire;
-        initBullets();
         mShotUp = true;
+        initBullets();
+
 
     }
     public Gun(BaseObj owner, int shootingSpeed, int payLoad, boolean unlimited, boolean autoFire, boolean shootUp) {
         super(owner, shootingSpeed, payLoad, unlimited);
         mAutoFire = autoFire;
-        initBullets();
         mShotUp = shootUp;
+        initBullets();
+
     }
     private void initBullets() {
         mBulletMotion = new Motion(Motion.MOTION_TYPE_NORMAL, this.owner.motion.position, BULLET_SPEED); //bullest use the owner's pos as default.
@@ -47,6 +49,7 @@ public class Gun extends BaseWeapon {
     public void onDraw(Canvas can) {
         super.onDraw(can);
         if(mAutoFire && !owner.motion.position.outOfScreen()){
+
             if(mShotUp)
             this.fire();
             else{
@@ -59,7 +62,11 @@ public class Gun extends BaseWeapon {
     class GunBullet extends Bullet {
         public GunBullet(Motion motion) {
             super(AttackType.TYPE_GUN, BULLET_AREA, motion, BULLET_DAMAGE, Gun.this, BULLET_WIDTH, BULLET_HEIGHT);
-            mBitmap = BitmapFactory.decodeResource(owner.mContext.getResources(),R.drawable.bulet);
+            if(mShotUp){
+            mBitmap = BitmapFactory.decodeResource(owner.mContext.getResources(),R.drawable.bulet);}
+            else {
+                mBitmap = BitmapFactory.decodeResource(owner.mContext.getResources(),R.drawable.bulet_down);
+            }
         }
 
     }

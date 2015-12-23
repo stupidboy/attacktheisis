@@ -18,4 +18,17 @@ public class Settings {
     public static int ALIANCE_UN = 0;
     public static int ALIANCE_IS = 1;
 
+    public static final int DESTORY_ANIM_COUNTS = 8;
+    public static final int DESTORY_ANIM_WIDTH = 120;
+    public static final int DESTORY_ANIM_HEIGHT = 120;
+    //enmy jet anim
+    public static final int ENEMY_JET_NORMAL_ANIM_COUNTS = 4;
+    public static final int ENEMY_JET_NORMAL_ANIM_WIDTH = 216;
+    public static final int ENEMY_JET_NORMAL_ANIM_HEIGHT = 248;
+    //UN jet anim
+    public static final int UN_JET_NORMAL_ANIM_COUNTS = 4;
+    public static final int UN_JET_NORMAL_ANIM_WIDTH = 210;
+    public static final int UN_JET_NORMAL_ANIM_HEIGHT = 248;
+
+
 }

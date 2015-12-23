@@ -4,11 +4,14 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.util.Log;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
+import cn.spreadtrum.com.attacktheisis.R;
 import cn.spreadtrum.com.attacktheisis.obj.BaseObj;
 import cn.spreadtrum.com.attacktheisis.obj.Coordinate;
 import cn.spreadtrum.com.attacktheisis.obj.EnemyJet;
@@ -46,8 +49,13 @@ public class Stage {
     private Paint mPaint;
 
     private int mGameStatus = 0;
-
-
+//audio
+    private int mAudioBomb = 0;
+    private int mAudioGameOver =0 ;
+    private int mAudioBg = 0;
+    private int mAudioshot = 0;
+    private SoundPool mSoundPool;
+    private GameMenu mGameMenu ;
     public Stage(int count, Context context, int width ,int height){
         mPaint = new Paint();
         mPaint.setTextSize(32);
@@ -57,9 +65,33 @@ public class Stage {
         mScreenHeight = height;
         mScreenWidth = width;
         mObjs = new ArrayList<BaseObj>();
+        mGameMenu = new GameMenu(this);
        // addJet();
         //addEmenyJet();
         //addEmenyJet();
+        initAudio();
+        playBg();
+
+    }
+
+    private void  initAudio(){
+        mSoundPool = new SoundPool(10, AudioManager.STREAM_MUSIC,5);
+        mAudioBomb = mSoundPool.load(mContext, R.raw.bomb,1);
+        mAudioGameOver = mSoundPool.load(mContext, R.raw.gameover,1);
+        mAudioBg = mSoundPool.load(mContext, R.raw.music,1);
+        mAudioshot = mSoundPool.load(mContext, R.raw.shot,1);
+    }
+    public void playBg(){
+        mSoundPool.play(mAudioBg,1,1,0,1,1);
+    }
+    public void playBomb(){
+        mSoundPool.play(mAudioBomb,1,1,0,0,1);
+    }
+    public  void playGameOver(){
+        mSoundPool.play(mAudioBg,1,1,0,0,1);
+    }
+    public  void playShot(){
+        mSoundPool.play(mAudioshot, 1, 1, 0, 0, 1);
     }
     //add our jet to stage...
     private void addJet() {
@@ -95,6 +127,9 @@ public class Stage {
     }
     public int getmScreenHeight(){
         return mScreenHeight;
+    }
+    public Context getContext(){
+        return mContext;
     }
     public void OnDraw(Canvas canvas) {
         synchronized (this) {
@@ -134,8 +169,9 @@ public class Stage {
         synchronized (this) {
             switch (mGameStatus) {
                 case GAME_STATUS_INIT:
-                    if(event.getAction() == MotionEvent.ACTION_DOWN)
-                    startGame();
+                    if(event.getAction() == MotionEvent.ACTION_DOWN && mGameMenu.startTouched((int)event.getX(),(int)event.getY())) {
+                        startGame();
+                    }
                     break;
                 case GAME_STATUS_RUNNING:
                     for (BaseObj obj : mObjs) {
@@ -143,7 +179,7 @@ public class Stage {
                     }
                     break;
                 case GAME_STATUS_OVER:
-                    if(event.getAction() == MotionEvent.ACTION_DOWN)
+                    if(event.getAction() == MotionEvent.ACTION_DOWN && mGameMenu.startTouched((int)event.getX(),(int)event.getY()))
                     startGame();
                     break;
             }
@@ -162,16 +198,17 @@ public class Stage {
         mGameStatus = GAME_STATUS_RUNNING;
     }
     private void drawInitGame(Canvas canvas){
-        mPaint.setTextSize(50);
-        canvas.drawText("Touch to start",30,getmScreenHeight()/2,mPaint);
-
+        //mPaint.setTextSize(50);
+        //canvas.drawText("Touch to start",30,getmScreenHeight()/2,mPaint);
+        mGameMenu.drawOnGameInit(canvas);
     }
     public void gameOver(){
         mGameStatus = GAME_STATUS_OVER;
     }
-    private void drawGameOver(Canvas canvas){
-        mPaint.setTextSize(50);
-        canvas.drawText("Score "+mScore+",Touch to retry",0,getmScreenHeight()/2,mPaint);
+    private void drawGameOver(Canvas canvas) {
+        mPaint.setTextSize(70);
+        canvas.drawText("Score "+mScore,mScreenWidth/2-100, getmScreenHeight()/3,mPaint);
+        mGameMenu.drawOnGameOver(canvas);
     }
 
 

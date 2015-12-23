@@ -2,12 +2,15 @@ package cn.spreadtrum.com.attacktheisis.obj;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
+
+import cn.spreadtrum.com.attacktheisis.R;
 import cn.spreadtrum.com.attacktheisis.obj.Settings;
 import cn.spreadtrum.com.attacktheisis.stage.Stage;
 
@@ -46,6 +49,10 @@ public class BaseObj {
     protected Rect mRect = new Rect();
     protected Stage mStage;
     protected int mAliance = 0;
+    protected Bitmap[] mDistoryAnim;
+    private int mDestoryAnimCount = 0;
+    protected int mNormalAnimCounts = 0;
+    protected Bitmap[] mViews;
 
     public BaseObj(int health, int status, Motion motion, int armorType, String name, int width, int height, Context context, Stage stage) {
         this.health = health;
@@ -57,31 +64,57 @@ public class BaseObj {
         this.height = height;
         this.mContext = context;
         this.mStage = stage;
-        Log.e(Settings.TAG,"obj creating... width = "+width+"height = "+height+"::"+motion);
+        //mDistoryView = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.b)
+        initDestoryAnim();
+        Log.e(Settings.TAG, "obj creating... width = " + width + "height = " + height + "::" + motion);
     }
-    protected void setImageView(Bitmap view){
+
+    private void initDestoryAnim() {
+        Bitmap all = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.explosion);
+        mDistoryAnim = new Bitmap[Settings.DESTORY_ANIM_COUNTS];
+        for (int i = 0; i < Settings.DESTORY_ANIM_COUNTS; i++) {
+            if (i < 4) {
+                mDistoryAnim[i] = Bitmap.createBitmap(all, i * Settings.DESTORY_ANIM_WIDTH, 0, Settings.DESTORY_ANIM_WIDTH, Settings.DESTORY_ANIM_HEIGHT);
+            } else {
+                mDistoryAnim[i] = Bitmap.createBitmap(all, (i - 4) * Settings.DESTORY_ANIM_WIDTH, Settings.DESTORY_ANIM_HEIGHT, Settings.DESTORY_ANIM_WIDTH, Settings.DESTORY_ANIM_HEIGHT);
+            }
+
+        }
+    }
+
+    protected void setImageView(Bitmap view) {
         mView = view;
     }
+
     protected void underAttack(int attackType, int damage) {
         if (status == STATUS_NORMAL) {
             int trueDamage = armor.takeDamage(attackType, damage);
             health -= trueDamage;
-            Log.e(Settings.TAG,"underattack!! damge = "+damage);
+            Log.e(Settings.TAG, "underattack!! damge = " + damage);
             if (health <= 0) {
                 status = STATUS_DISTORYED;
                 OnDestory();
+                //getStage().playBomb();
             }
         }
     }
 
+    //draw destory anim & playeffect, if draw done ,get reset;
     protected void OnDestory() {
-
+        getStage().playBomb();
     }
-    public Stage getStage(){
+
+    //return true if draw done
+    protected boolean drawDestoryDone() {
+        return mDestoryAnimCount >= Settings.DESTORY_ANIM_COUNTS;
+    }
+
+    public Stage getStage() {
         return mStage;
     }
+
     protected boolean isUnderAttack(Bullet bullet) {
-        if(bullet.weapon.owner == this || bullet.weapon.owner.mAliance == this.mAliance){
+        if (bullet.weapon.owner == this || bullet.weapon.owner.mAliance == this.mAliance) {
             return false;
         }
         int left = (int) (motion.position.getPosX() - width / 2);
@@ -92,7 +125,8 @@ public class BaseObj {
         rect.inset(-bullet.trueAreaX, -bullet.trueAreaY);
         return rect.contains(bullet.motion.position.getPosX(), bullet.motion.position.getPosY());
     }
-    protected boolean isOnTouch(int x, int y){
+
+    protected boolean isOnTouch(int x, int y) {
         int left = (int) (motion.position.getPosX() - width / 2);
         int top = (int) (motion.position.getPosY() - height / 2);
         int right = (int) (motion.position.getPosX() + width / 2);
@@ -100,18 +134,45 @@ public class BaseObj {
         Rect rect = new Rect(left, top, right, bottom);
         return rect.contains(x, y);
     }
-    public   void onTouch(MotionEvent event) {
+
+    public void onTouch(MotionEvent event) {
 
     }
+
+    public void reset() {
+        mDestoryAnimCount = 0;
+    }
+
+    protected void drawBitmap(Bitmap bitmap, Canvas canvas) {
+        int left = (int) (motion.position.getPosX() - width / 2);
+        int top = (int) (motion.position.getPosY() - height / 2);
+        int right = (int) (motion.position.getPosX() + width / 2);
+        int bottom = (int) (motion.position.getPosY() + height / 2);
+        mRect.set(left, top, right, bottom);
+        //Log.e(Settings.TAG, "obj on draw----->" + name + " " + left + " :" + top + " :" + right + " :" + bottom);
+        canvas.drawBitmap(bitmap, null, mRect, null);
+    }
+
+    private void drawDestoryAnim(Canvas canvas) {
+        if (mDestoryAnimCount < Settings.DESTORY_ANIM_COUNTS) {
+            drawBitmap(mDistoryAnim[mDestoryAnimCount], canvas);
+            mDestoryAnimCount++;
+        } else {
+            reset();
+        }
+    }
+
+    protected void drawNormalAnim(Canvas canvas) {
+        drawBitmap(mView, canvas);
+    }
+
     public void onDraw(Canvas canvas) {
         synchronized (this) {
-            int left = (int) (motion.position.getPosX() - width / 2);
-            int top = (int) (motion.position.getPosY() - height / 2);
-            int right = (int) (motion.position.getPosX() + width / 2);
-            int bottom = (int) (motion.position.getPosY() + height / 2);
-            mRect.set(left, top, right, bottom);
-            //Log.e(Settings.TAG, "obj on draw----->" + name + " " + left + " :" + top + " :" + right + " :" + bottom);
-            canvas.drawBitmap(mView, null, mRect, null);
+            if (status == STATUS_NORMAL) {
+                drawNormalAnim(canvas);
+            } else if (status == STATUS_DISTORYED) {
+                drawDestoryAnim(canvas);
+            }
         }
 
     }

@@ -20,6 +20,7 @@ public class Gun extends BaseWeapon {
     private int gap = 1;//means 0 frame skeep before next fire
     boolean mAutoFire = false;
     boolean mShotUp = true;
+    private int shotwait = 30;
     public Gun(BaseObj owner, int shootingSpeed, int payLoad, boolean unlimited, boolean autoFire) {
         super(owner, shootingSpeed, payLoad, unlimited);
         mAutoFire = autoFire;
@@ -45,8 +46,16 @@ public class Gun extends BaseWeapon {
     }
 
     public void updateFireControl(int gap ,int shootingSpeed){
-        this.shootingSpeed = shootingSpeed;
-        this.gap = gap;
+        boolean changed = false;
+        if(gap != this.gap || shootingSpeed != this.shootingSpeed){
+            changed = true;
+        }
+
+        if(changed) {
+            this.shootingSpeed = shootingSpeed;
+            this.gap = gap;
+            initBullets();
+        }
     }
 
 
@@ -54,7 +63,7 @@ public class Gun extends BaseWeapon {
     @Override
     public void onDraw(Canvas can) {
         super.onDraw(can);
-        if(mAutoFire && !owner.motion.position.outOfScreen()){
+        if(mAutoFire && !owner.motion.position.outOfScreen() && shotwait--<0){
             if(count++%gap == 0) {
                 Log.e(Settings.TAG, "fire..");
                 if (mShotUp) {

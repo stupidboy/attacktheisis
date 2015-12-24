@@ -79,11 +79,43 @@ public class Jet extends BaseObj {
 
     void setWeapons() {
         mGun = new Gun(this, GUN_SHOOT_SPEED, GUN_PAY_LOAD, true,true);
-        mGun.updateFireControl(5,3);
+        mGun.updateFireControl(5, 3);
     }
 
+    int getShotingspeed(int hard){
+        switch (hard){
+            case 0:
+                return 3;
+            case 1:
+                return 4;
+            case 2:
+                return 5;
+            case 3:
+                return 6;
+            default:
+                return 7;
+
+        }
+    }
+    int getGap(int hard){
+        switch (hard){
+            case 0:
+                return 5;
+            case 1:
+                return 4;
+            case 2:
+                return 3;
+            default:
+                return 2;
+        }
+    }
+    void updateHardLevel(){
+        int hard = getStage().getHardLevel();
+        mGun.updateFireControl(getGap(hard),getShotingspeed(hard));
+    }
     @Override
     public void onDraw(Canvas canvas) {
+        updateHardLevel();
         mGun.onDraw(canvas);
         super.onDraw(canvas);
 

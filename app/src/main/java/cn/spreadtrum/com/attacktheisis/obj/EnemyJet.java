@@ -58,7 +58,7 @@ public class EnemyJet extends  BaseObj {
 
     void setWeapons() {
         mGun = new Gun(this, GUN_SHOOT_SPEED, GUN_PAY_LOAD, true,true,false);
-        mGun.updateFireControl(5,3);
+        mGun.updateFireControl(10,1);
     }
 
     @Override

@@ -56,6 +56,8 @@ public class Stage {
     private int mAudioshot = 0;
     private SoundPool mSoundPool;
     private GameMenu mGameMenu ;
+    private int  mHardLevel = 0;
+    private int mEnmyJetCount = 0;
     public Stage(int count, Context context, int width ,int height){
         mPaint = new Paint();
         mPaint.setTextSize(32);
@@ -66,6 +68,8 @@ public class Stage {
         mScreenWidth = width;
         mObjs = new ArrayList<BaseObj>();
         mGameMenu = new GameMenu(this);
+        mHardLevel = 0;
+        mEnmyJetCount = 0;
        // addJet();
         //addEmenyJet();
         //addEmenyJet();
@@ -88,7 +92,7 @@ public class Stage {
         mSoundPool.play(mAudioBomb,1,1,0,0,1);
     }
     public  void playGameOver(){
-        mSoundPool.play(mAudioBg,1,1,0,0,1);
+        mSoundPool.play(mAudioBg, 1, 1, 0, 0, 1);
     }
     public  void playShot(){
         mSoundPool.play(mAudioshot, 1, 1, 0, 0, 1);
@@ -115,6 +119,7 @@ public class Stage {
         Log.e(Settings.TAG, "addJet ---->" + motion);
         synchronized (mObjs) {
             mObjs.add(jet);
+            mEnmyJetCount ++;
         }
     }
     private void drawScore(Canvas canvas){
@@ -141,8 +146,13 @@ public class Stage {
                     break;
                 case GAME_STATUS_RUNNING:
                     drawScore(canvas);
-                    for (BaseObj obj : mObjs) {
-                        obj.onDraw(canvas);
+                    if(mEnmyJetCount < mHardLevel+3 && mEnmyJetCount <=8){
+                        addEmenyJet();
+                    }
+                    synchronized (mObjs) {
+                        for (BaseObj obj : mObjs) {
+                            obj.onDraw(canvas);
+                        }
                     }
                     break;
                 case GAME_STATUS_OVER:
@@ -155,9 +165,16 @@ public class Stage {
 
         }
     }
+
     public  void updateScore(int delta){
         synchronized (this) {
             mScore += delta;
+            mHardLevel = mScore/15;
+        }
+    }
+    public int getHardLevel(){
+        synchronized (this){
+            return mHardLevel;
         }
     }
     public ArrayList<BaseObj> getObjs(){
@@ -174,8 +191,10 @@ public class Stage {
                     }
                     break;
                 case GAME_STATUS_RUNNING:
-                    for (BaseObj obj : mObjs) {
-                        obj.onTouch(event);
+                    synchronized (mObjs) {
+                        for (BaseObj obj : mObjs) {
+                            obj.onTouch(event);
+                        }
                     }
                     break;
                 case GAME_STATUS_OVER:
@@ -188,6 +207,8 @@ public class Stage {
     }
     private void startGame(){
         mScore = 0;
+        mHardLevel = 0;
+        mEnmyJetCount = 0;
         synchronized (mObjs) {
             mObjs.clear();
         }
@@ -204,6 +225,7 @@ public class Stage {
     }
     public void gameOver(){
         mGameStatus = GAME_STATUS_OVER;
+        mEnmyJetCount = 0;
     }
     private void drawGameOver(Canvas canvas) {
         mPaint.setTextSize(70);

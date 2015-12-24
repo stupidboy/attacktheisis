@@ -60,6 +60,7 @@ public class Bullet {
      // we use linear at first, so
         int speedX = 0;
         int speedY = 0;
+        reset();
         speedX = co.getPosX() >this.weapon.owner.motion.position.getPosX() ? this.motion.speed: -this.motion.speed;
         speedY = co.getPosY() > this.weapon.owner.motion.position.getPosY() ? this.motion.speed: -this.motion.speed;
         if(co.getPosX() == this.weapon.owner.motion.position.getPosX()){
